@@ -21,7 +21,6 @@ class AlertDialogActivity: Activity() {
                 finish()
             }
 
-        // Create the AlertDialog object and return it
         val alert = builder.create()
         alert.setCancelable(false)
         alert.show()

@@ -5,7 +5,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 
-class ForcedAlertModule internal constructor(context: ReactApplicationContext?) :
+class ForcedAlertModule internal constructor(private val context: ReactApplicationContext?) :
     ReactContextBaseJavaModule(context) {
 
     override fun getName(): String {
@@ -18,6 +18,6 @@ class ForcedAlertModule internal constructor(context: ReactApplicationContext?) 
         dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         dialogIntent.putExtra("title", title)
         dialogIntent.putExtra("message", message)
-        currentActivity!!.application.startActivity(dialogIntent)
+        context?.startActivity(dialogIntent)
     }
 }
