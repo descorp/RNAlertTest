@@ -2,6 +2,7 @@ package com.testrn74.my_module
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 
 class AlertDialogActivity: Activity() {
@@ -15,9 +16,10 @@ class AlertDialogActivity: Activity() {
         val message = intent.getStringExtra("message")
         val title = intent.getStringExtra("title")
         builder
+            .setView(ProgressBar(this))
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Ok") { _, _ ->
+            .setPositiveButton("Dismiss") { _, _ ->
                 finish()
             }
 

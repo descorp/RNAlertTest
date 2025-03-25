@@ -67,7 +67,7 @@ function App(): React.JSX.Element {
             console.log('\n');
             await sleep(500);
             console.log('Timer works before Activity');
-            ForcedAlert.alert("Alert", "Press Ok")
+            ForcedAlert.alert("Native Alert", "Custom Android Activity")
             await sleep(500);
             console.log('Timer works after async');
           }}
