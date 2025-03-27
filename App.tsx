@@ -15,7 +15,9 @@ import {
   View,
   NativeModules,
   AppState,
-  Text
+  Text,
+  EmitterSubscription,
+  NativeEventEmitter
 } from 'react-native';
 
 import {
@@ -24,6 +26,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 const { ForcedAlert } = NativeModules;
+const {EVENT_A, EVENT_B} = ForcedAlert.getConstants();
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -31,14 +34,24 @@ function App(): React.JSX.Element {
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', nextAppState => {
+    var subscriptions: EmitterSubscription[] = []
+    subscriptions.push(AppState.addEventListener('change', nextAppState => {
       appState.current = nextAppState;
       setAppStateVisible(appState.current);
       console.log('AppState', appState.current);
-    });
+    }));
+
+    const eventEmitter = new NativeEventEmitter(ForcedAlert);
+    subscriptions.push(eventEmitter.addListener(EVENT_A, message => {
+      console.log('Event A: ', message);
+    }));
+    subscriptions.push(eventEmitter.addListener(EVENT_B, async message => {
+      await sleep(500);
+      console.log('Event B: ', message);
+    }));
 
     return () => {
-      subscription.remove();
+      subscriptions.forEach((s) => s.remove());
     };
   }, []);
 
@@ -68,6 +81,7 @@ function App(): React.JSX.Element {
             await sleep(500);
             console.log('Timer works before Activity');
             ForcedAlert.alert("Native Alert", "Custom Android Activity")
+            console.log('Custom activity started');
             await sleep(500);
             console.log('Timer works after async');
           }}
